@@ -2,13 +2,21 @@ import streamlit as st
 import pandas as pd
 
 
+
 import pickle
 
 # Correct path to model file
 model_file_path = "model/gradient_boosting_regressor_model.pkl"
+
 # Load model
-with open(model_file_path, 'rb') as model_file:
-    model = pickle.load(model_file)
+try:
+    with open(model_file_path, 'rb') as model_file:
+        model = pickle.load(model_file)
+    print("Model loaded successfully.")
+except FileNotFoundError:
+    print(f"Error: The file at '{model_file_path}' was not found.")
+except Exception as e:
+    print(f"An error occurred: {e}")
 
 
 
