@@ -1,24 +1,21 @@
 import streamlit as st
 import pandas as pd
+
+
 import pickle
 
-# Define the correct path to your model file
-model_file_path = "model/gradient_boosting_regressor_model.pkl"
+# Correct path to model file
+model_file_path = ("model", "gradient_boosting_regressor_model.pkl")
 
-# Try to load the model
-try:
-    with open(model_file_path, 'rb') as model_file:
-        model = pickle.load(model_file)
-    st.write("Model loaded successfully.")
-except FileNotFoundError:
-    st.error(f"Error: The file at '{model_file_path}' was not found.")
-except Exception as e:
-    st.error(f"An error occurred while loading the model: {e}")
+# Load model
+with open(model_file_path, 'rb') as model_file:
+    model = pickle.load(model_file)
 
-# If the model is loaded successfully, proceed with the app
-if 'model' in globals():
-    st.title("Car Price Prediction")
 
+
+st.title("Car Price Prediction")
+
+# Create the input fields for the user
 car_name = st.selectbox("Car Name", ['Audi A4', 'Audi A6', 'Audi A8', 'Audi Q7', 'BMW 3', 'BMW 5', 'BMW 6', 'BMW 7', 'BMW X1', 'BMW X3', 'BMW X4', 'BMW X5', 'BMW Z4', 'Bentley Continental', 'Datsun GO', 'Datsun RediGO', 'Datsun redi-GO', 'Ferrari GTC4Lusso', 'Force Gurkha', 'Ford Aspire', 'Ford Ecosport', 'Ford Endeavour', 'Ford Figo', 'Ford Freestyle', 'Honda Amaze', 'Honda CR', 'Honda CR-V', 'Honda City', 'Honda Civic', 'Honda Jazz', 'Honda WR-V', 'Hyundai Aura', 'Hyundai Creta', 'Hyundai Elantra', 'Hyundai Grand', 'Hyundai Santro', 'Hyundai Tucson', 'Hyundai Venue', 'Hyundai Verna', 'Hyundai i10', 'Hyundai i20', 'ISUZU MUX', 'Isuzu D-Max', 'Jaguar F-PACE', 'Jaguar XE', 'Jaguar XF', 'Jeep Compass', 'Jeep Wrangler', 'Kia Carnival', 'Kia Seltos', 'Land Rover Rover', 'Lexus ES', 'Lexus RX', 'MG Hector', 'Mahindra Alturas', 'Mahindra Bolero', 'Mahindra KUV', 'Mahindra KUV100', 'Mahindra Marazzo', 'Mahindra Scorpio', 'Mahindra Thar', 'Mahindra XUV300', 'Mahindra XUV500', 'Maruti Alto', 'Maruti Baleno', 'Maruti Celerio', 'Maruti Ciaz', 'Maruti Dzire LXI', 'Maruti Dzire VXI', 'Maruti Dzire ZXI', 'Maruti Eeco', 'Maruti Ertiga', 'Maruti Ignis', 'Maruti S-Presso', 'Maruti Swift', 'Maruti Swift Dzire', 'Maruti Vitara', 'Maruti Wagon R', 'Maruti XL6', 'Maserati Ghibli', 'Maserati Quattroporte', 'Mercedes-Benz C-Class', 'Mercedes-Benz CLS', 'Mercedes-Benz E-Class', 'Mercedes-Benz GL-Class', 'Mercedes-Benz GLS', 'Mercedes-Benz S-Class', 'Mini Cooper', 'Nissan Kicks', 'Nissan X-Trail', 'Porsche Cayenne', 'Porsche Macan', 'Porsche Panamera', 'Renault Duster', 'Renault KWID', 'Renault Triber', 'Rolls-Royce Ghost', 'Skoda Octavia', 'Skoda Rapid', 'Skoda Superb', 'Tata Altroz', 'Tata Harrier', 'Tata Hexa', 'Tata Nexon', 'Tata Safari', 'Tata Tiago', 'Tata Tigor', 'Toyota Camry', 'Toyota Fortuner', 'Toyota Glanza', 'Toyota Innova', 'Toyota Yaris', 'Volkswagen Polo', 'Volkswagen Vento', 'Volvo S90', 'Volvo XC', 'Volvo XC60', 'Volvo XC90'],index=None,placeholder="Select the Car...") 
 import streamlit as st
 
@@ -48,6 +45,7 @@ transmission_type = st.selectbox("Transmission Type", ['Select an option', 'Auto
 
 # Seats
 seats = st.selectbox("Seats", [None, 2, 4, 5, 6, 7, 8, 9])  # Added None as an option
+
 # Validation for Select Boxes
 if seller_type == "Select an option":
     st.warning("Please select a valid Seller Type.")
@@ -71,26 +69,21 @@ if (
     st.success("All inputs are valid!")
 
 
-    # Prepare the input data for prediction
-    input_data = pd.DataFrame({
-        'car_name': [car_name],
-        'vehicle_age': [vehicle_age],
-        'km_driven': [km_driven],
-        'mileage': [mileage],
-        'engine': [engine],
-        'max_power': [max_power],
-        'seller_type': [seller_type],
-        'fuel_type': [fuel_type],
-        'transmission_type': [transmission_type],
-        'seats': [seats]
-    })
+# Create a DataFrame from the user input
+input_data = pd.DataFrame({
+    'car_name': [car_name],
+    'vehicle_age': [vehicle_age],
+    'km_driven': [km_driven],
+    'mileage': [mileage],
+    'engine': [engine],
+    'max_power': [max_power],
+    'seller_type': [seller_type],
+    'fuel_type': [fuel_type],
+    'transmission_type': [transmission_type],
+    'seats': [seats]
+})
 
-    # Predict the price if button is pressed
-    if st.button("Predict Price"):
-        if 'model' in globals():
-            prediction = model.predict(input_data)
-            st.write(f"Predicted Price: ₹{prediction[0]:,.2f}")
-        else:
-            st.error("Model is not loaded. Please try again.")
-else:
-    st.error("Model could not be loaded.")
+# Predict the price using the pipeline
+if st.button("Predict Price"):
+    prediction = model.predict(input_data)
+    st.write(f"Predicted Price: ₹{prediction[0]:,.2f}")
