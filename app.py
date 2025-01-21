@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-# Define the correct path to your model file
-import os
+
 
 # Define the model file path dynamically
-model_file_path = os.path.join(os.getcwd(), "model", "gradient_boosting_regressor_model.pkl")
+model_file_path = "model/gradient_boosting_regressor_model.pkl"
 
 # Try to load the model
 try:
