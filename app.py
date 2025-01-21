@@ -5,7 +5,7 @@ import pandas as pd
 import pickle
 
 # Correct path to model file
-model_file_path = "model/gradient_boosting_regressor_model.pkl"
+model_file_path = 'model/gradient_boosting_regressor_model.pkl'
 # Load model
 with open(model_file_path, 'rb') as model_file:
     model = pickle.load(model_file)
